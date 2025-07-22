@@ -356,20 +356,19 @@
     });
 
     const bgm = document.getElementById('bgm');
-    const soundBtn = document.getElementById('soundToggle');
-    let isMuted = true;
+const soundBtn = document.getElementById('soundToggle');
+let soundOn = false;
 
-    soundBtn.onclick = () => {
-      isMuted = !isMuted;
-      soundBtn.style.backgroundImage = isMuted ? "url('SoundOff.png')" : "url('SoundOn.png')";
-      if (isMuted) {
-        bgm.pause();
-      } else {
-        bgm.play().catch(() => {
-          console.warn("Autoplay failed");
-        });
-      }
-    };
+soundBtn.onclick = () => {
+  soundOn = !soundOn;
+  if (soundOn) {
+    bgm.play().catch(() => {});  // 자동재생 차단 대응
+    soundBtn.style.backgroundImage = "url('SoundOn.png')";
+  } else {
+    bgm.pause();
+    soundBtn.style.backgroundImage = "url('SoundOff.png')";
+  }
+};
   </script>
 </body>
 </html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>owve</title>
+
+  <!-- Swiper CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .ring-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      gap: 30px;
+    }
+
+    .ring-content:hover .ring-image {
+      filter: drop-shadow(0 0 80px #fff);
+    }
+
+    .ring-image {
+      width: 28vw;
+      transition: .8s ease-in-out filter;
+      will-change: filter;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+
+    @media (max-width: 900px) {.ring-image {width: 332px;}}
+    @media (max-width: 600px) {.ring-image {width: 237px;}}
+
+    .ring-text {height: 30px;}
+    .ring-text img {height: 100%; width: auto;}
+
+    .gallery-modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgb(0, 0, 0);
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      transition: .4s opacity;
+    }
+
+    .gallery-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .swiper {
+      width: 90vw;
+      height: 90vh;
+      max-width: 1200px;
+      max-height: 90vh;
+    }
+
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swiper-slide img,
+    .swiper-slide video {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .g-btn {
+      position: absolute;
+      z-index: 1000;
+      width: 40px;
+      height: 40px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: none;
+      cursor: pointer;
+      background-color: transparent;
+    }
+
+    .g-close {top: 20px; right: 30px; width: 20px; background-image: url('menu-close.png');}
+    .g-download {bottom: 20px; right: 80px; width: 20px; background-image: url('menu-download.png');}
+
+    .g-next, .g-prev {
+      position: fixed;
+      top: 50%;
+      width: 30px;
+      cursor: pointer;
+      z-index: 10;
+      background-image: url('menu-arrow.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 30px;
+      background-color: transparent;
+      border: none;
+    }
+
+    .g-next {right: 30px;}
+    .g-prev {left: 30px; transform: translateY(-50%) scaleX(-1);}
+
+    .swiper-slide video,
+    .swiper-slide iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .g-download {display: none;}
+    .gallery-modal.active .g-download {display: block;}
+
+    #celebration {
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgb(0, 0, 0); /* 반투명 검은 배경 */
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+   @media (max-width: 1080px) {
+  #celebration {
+    top: auto;
+    bottom: 30%;
+    font-size: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 600px) {
+  #celebration {
+    top: auto;
+    bottom: 37%;
+    font-size: 0.9rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+  #confetti {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+  </style>
+</head>
+<body>
+
+  <div class="ring-content" id="ringTrigger">
+    <img class="ring-image" src="KiiiKiii_Ring.png" alt="ring">
+    <div class="ring-text"><img src="name-logo.png" alt="text"></div>
+  </div>
+
+  <div class="gallery-modal" id="galleryModal">
+    <button class="g-btn g-close" aria-label="close"></button>
+    <button class="g-btn g-download" aria-label="download"></button>
+    <button class="g-btn g-prev" aria-label="previous"></button>
+    <button class="g-btn g-next" aria-label="next"></button>
+
+    <div class="swiper">
+      <div class="swiper-wrapper" id="swiperWrapper"></div>
+    </div>
+  </div>
+
+  <div id="celebration">owve 1st EP [O0ㅇ] out now!</div>
+
+  <button id="soundToggle" style="position:fixed; bottom:30px; right:40px; z-index:1001; background:transparent; border:none; width:20px; height:20px; background-image:url('SoundOff.png'); background-size:contain; background-repeat:no-repeat;"></button>
+
+  <audio id="bgm" src="@%.mp3" loop></audio>
+
+  <script>
+    let swiper;
+
+    function launchFireworks() {
+      const duration = 5600;
+      const end = Date.now() + duration;
+      (function frame() {
+        confetti({ particleCount: 10, angle: 60, spread: 70, startVelocity: 60, origin: { x: 0, y: 0.7 } });
+        confetti({ particleCount: 10, angle: 120, spread: 70, startVelocity: 60, origin: { x: 1, y: 0.7 } });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+    }
+
+    function showCelebration() {
+      const overlay = document.getElementById('celebration');
+      overlay.style.opacity = 1;
+      launchFireworks();
+      setTimeout(() => { overlay.style.opacity = 0; }, 8000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const mediaList = [
+        { type: 'video', src: 'media/GROUNDWORK.mp4' },
+        { type: 'image', src: 'media/question mark.gif' },
+        { type: 'image', src: 'media/kiiikiii.jpg' },
+        { type: 'image', src: 'media/leesol01.png' },
+        { type: 'image', src: 'media/leesol02.jpg' },
+        { type: 'image', src: 'media/sui01.jpg' },
+        { type: 'image', src: 'media/mc.gif' },
+        { type: 'image', src: 'media/0725.png' },
+        { type: 'image', src: 'media/fire.gif' },
+        { type: 'image', src: 'media/0728.png' },
+        { type: 'image', src: 'media/0729.png' },
+        { type: 'image', src: 'media/0730.png' },
+        { type: 'image', src: 'media/0731.png' },
+        { type: 'image', src: 'media/0801.png' },
+        { type: 'youtube', src: 'https://www.youtube.com/embed/pTycfmVzdl8' }
+      ];
+
+      const wrapper = document.getElementById('swiperWrapper');
+      mediaList.forEach(item => {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+        if (item.type === 'image') {
+          slide.innerHTML = `<img src="${item.src}" alt="">`;
+        } else if (item.type === 'video') {
+          slide.innerHTML = `<video src="${item.src}" playsinline loop></video>`;
+        } else if (item.type === 'youtube') {
+          slide.innerHTML = `
+            <iframe 
+              src="${item.src}?autoplay=1&mute=1&rel=0&enablejsapi=1"
+              frameborder="0"
+              allow="autoplay; encrypted-media"
+              allowfullscreen
+              class="youtube-iframe"
+            ></iframe>`;
+        }
+        wrapper.appendChild(slide);
+      });
+
+      swiper = new Swiper('.swiper', {
+        initialSlide: 0,
+        loop: true,
+        navigation: {
+          nextEl: '.g-next',
+          prevEl: '.g-prev'
+        },
+        on: {
+          slideChangeTransitionEnd() {
+            const activeSlide = swiper.slides[swiper.activeIndex];
+
+            document.querySelectorAll('.swiper-slide video').forEach(video => {
+              if (activeSlide.contains(video)) {
+                video.muted = false;
+                video.play().catch(() => {
+                  video.muted = true;
+                  video.play();
+                });
+              } else {
+                video.pause();
+              }
+            });
+
+            document.querySelectorAll('.youtube-iframe').forEach(iframe => {
+              if (!activeSlide.contains(iframe)) {
+                const src = iframe.src;
+                iframe.src = '';
+                iframe.src = src;
+              }
+            });
+
+            if (swiper.realIndex === 0) {
+              showCelebration();
+            }
+          }
+        }
+      });
+
+      const modal = document.getElementById('galleryModal');
+      document.getElementById('ringTrigger').onclick = () => {
+        modal.classList.add('active');
+        swiper.update();
+        swiper.slideToLoop(0, 0);
+        setTimeout(() => {
+          const current = swiper.slides[swiper.activeIndex];
+          const video = current.querySelector('video');
+          if (video) {
+            video.muted = false;
+            video.play().catch(() => {
+              video.muted = true;
+              video.play();
+            });
+          }
+          showCelebration();
+        }, 50);
+      };
+
+      modal.querySelector('.g-close').onclick = () => {
+        modal.classList.remove('active');
+        modal.querySelectorAll('video').forEach(v => v.pause());
+      };
+
+      document.querySelector('.g-download').addEventListener('click', () => {
+        const currentSlide = swiper.slides[swiper.activeIndex];
+        if (!currentSlide) return;
+
+        const img = currentSlide.querySelector('img');
+        const video = currentSlide.querySelector('video');
+        let url, filename;
+
+        if (img) {
+          url = img.src;
+          filename = `download_${img.alt || 'image'}.jpg`;
+        } else if (video) {
+          url = video.src;
+          filename = `download_${video.alt || 'video'}.mp4`;
+        } else {
+          alert('다운로드할 미디어가 없습니다.');
+          return;
+        }
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    });
+
+    const bgm = document.getElementById('bgm');
+    const soundBtn = document.getElementById('soundToggle');
+    let isMuted = true;
+
+    soundBtn.onclick = () => {
+      isMuted = !isMuted;
+      soundBtn.style.backgroundImage = isMuted ? "url('SoundOff.png')" : "url('SoundOn.png')";
+      if (isMuted) {
+        bgm.pause();
+      } else {
+        bgm.play().catch(() => {
+          console.warn("Autoplay failed");
+        });
+      }
+    };
+  </script>
+</body>
+</html>

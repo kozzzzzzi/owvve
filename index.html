@@ -285,7 +285,7 @@ body {
         if (item.type === 'image') {
           slide.innerHTML = `<img src="${item.src}" alt="">`;
         } else if (item.type === 'video') {
-          slide.innerHTML = `<video src="${item.src}" autoplay playsinline loop></video>`;
+          slide.innerHTML = `<video src="${item.src}" autoplay playsinline loop controls></video>`;
         } else if (item.type === 'youtube') {
           slide.innerHTML = `<iframe src="${item.src}?autoplay=1&mute=1&rel=0&enablejsapi=1" 
   frameborder="0" 

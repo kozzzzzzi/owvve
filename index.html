@@ -9,264 +9,294 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-  <!-- Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
   <style>
     @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
-    body {
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .ring-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      gap: 30px;
-    }
-
-    .ring-content:hover .ring-image {
-      filter: drop-shadow(0 0 80px #fff);
-    }
-
-    .ring-image {
-      width: 28vw;
-      transition: .8s ease-in-out filter;
-      will-change: filter;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      transform: translateZ(0);
-    }
-
-    @media (max-width: 900px) {.ring-image {width: 332px;}}
-    @media (max-width: 600px) {.ring-image {width: 237px;}}
-
-    .ring-text {height: 30px;}
-    .ring-text img {height: 100%; width: auto;}
-
-    .gallery-modal {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: rgb(0, 0, 0);
-      z-index: 1;
-      opacity: 0;
-      pointer-events: none;
-      transition: .4s opacity;
-    }
-
-    .gallery-modal.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .swiper {
-      width: 90vw;
-      height: 90vh;
-      max-width: 1200px;
-      max-height: 90vh;
-    }
-
-    .swiper-slide {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .swiper-slide img,
-    .swiper-slide video {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    .g-btn {
-      position: absolute;
-      z-index: 1000;
-      width: 40px;
-      height: 40px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      border: none;
-      cursor: pointer;
-      background-color: transparent;
-    }
-
-    .g-close {top: 20px; right: 30px; width: 20px; background-image: url('menu-close.png');}
-    .g-download {bottom: 20px; right: 80px; width: 20px; background-image: url('menu-download.png');}
-
-    .g-next, .g-prev {
-      position: fixed;
-      top: 50%;
-      width: 30px;
-      cursor: pointer;
-      z-index: 10;
-      background-image: url('menu-arrow.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      height: 30px;
-      background-color: transparent;
-      border: none;
-    }
-
-    .g-next {right: 30px;}
-    .g-prev {left: 30px; transform: translateY(-50%) scaleX(-1);}
-
-    .swiper-slide video,
-    .swiper-slide iframe {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .g-download {display: none;}
-    .gallery-modal.active .g-download {display: block;}
-
-    #celebration {
-  position: fixed;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgb(0, 0, 0); /* 반투명 검은 배경 */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100vh;
+  background: #000;
   color: #fff;
-  font-size: 1.2rem;
-  font-weight: 500;
-  z-index: 10000;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  white-space: nowrap;
-  user-select: none;
+  font-family: sans-serif;
+  overflow-y: auto;
 }
-   @media (max-width: 1080px) {
-  #celebration {
-    top: auto;
-    bottom: 30%;
-    font-size: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 위쪽 정렬 */
+  padding: 20px 0; /* 위아래 여백 */
+}
+
+.ring-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 140px; /* 링 사이 간격 */
+  padding: 40px 0; /* 위아래 추가 여백 */
+  background: transparent;
+}
+
+.ring-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  gap: 30px;
+}
+
+#ringTrigger {
+  margin-top: 50px; /* 원하는 만큼 위쪽 여백 추가 */
+}
+
+.ring-content:hover .ring-image {
+  filter: drop-shadow(0 0 40px #fff); /* 필터 크기 적당히 조절 */
+}
+
+.ring-image {
+  width: 28vw;
+  transition: 0.8s ease-in-out filter;
+  will-change: filter;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+@media (max-width: 900px) {
+  .ring-image {
+    width: 332px;
+  }
+  .new-ring .ring-image {
+    width: 200px !important;
   }
 }
 
 @media (max-width: 600px) {
-  #celebration {
-    top: auto;
-    bottom: 37%;
-    font-size: 0.9rem;
-    left: 50%;
-    transform: translateX(-50%);
+  .ring-image {
+    width: 237px;
+  }
+  .new-ring .ring-image {
+    width: 130px !important;
   }
 }
 
-  #confetti {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
+.ring-text {
+  height: 30px;
+}
+
+.ring-text img {
   height: 100%;
-  z-index: 2;
+  width: auto;
+}
+
+/* 새로운 링 전용 */
+.new-ring .ring-image {
+  width: 13vw;
+}
+
+/* 모달 및 갤러리 관련 스타일 유지 */
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(0, 0, 0);
+  z-index: 1;
+  opacity: 0;
   pointer-events: none;
+  transition: 0.4s opacity;
+}
+
+.gallery-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.swiper {
+  width: 90vw;
+  height: 90vh;
+  max-width: 1200px;
+  max-height: 90vh;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img,
+.swiper-slide video,
+.swiper-slide iframe {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.g-btn {
+  position: absolute;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.g-close {
+  top: 20px;
+  right: 30px;
+  width: 20px;
+  background-image: url('menu-close.png');
+}
+
+.g-download {
+  bottom: 20px;
+  right: 80px;
+  width: 20px;
+  background-image: url('menu-download.png');
+  display: none;
+}
+
+.gallery-modal.active .g-download {
+  display: block;
+}
+
+.g-next,
+.g-prev {
+  position: fixed;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  background-image: url('menu-arrow.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.g-next {
+  right: 30px;
+}
+
+.g-prev {
+  left: 30px;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+#bgmToggle {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  width: 20px;
+  height: 20px;
+  background: url('SoundOff.png') no-repeat center center / contain;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+#bgmToggle.on {
+  background-image: url('SoundOn.png');
+}
+
+.new-ring {
+  margin-bottom: 4px; /* 새로운 링 밑에만 여백 */
 }
   </style>
 </head>
 <body>
 
+  <div class="ring-wrapper">
   <div class="ring-content" id="ringTrigger">
-    <img class="ring-image" src="KiiiKiii_Ring.png" alt="ring">
-    <div class="ring-text"><img src="name-logo.png" alt="text"></div>
+    <img class="ring-image" src="KiiiKiii_Ring.png" alt="ring" />
+    <div class="ring-text">
+      <img src="name-logo.png" alt="text" />
+    </div>
   </div>
+
+  <!-- 예약된 새 링 (처음엔 숨김) -->
+  <div class="ring-content new-ring" id="scheduledRing" style="display: none;">
+    <img class="ring-image" src="Sui_Ring.png" alt="new ring" />
+    <div class="ring-text">
+      <img src="name-sui.png" alt="new text" />
+    </div>
+  </div>
+</div>
+
 
   <div class="gallery-modal" id="galleryModal">
     <button class="g-btn g-close" aria-label="close"></button>
     <button class="g-btn g-download" aria-label="download"></button>
     <button class="g-btn g-prev" aria-label="previous"></button>
     <button class="g-btn g-next" aria-label="next"></button>
-
     <div class="swiper">
       <div class="swiper-wrapper" id="swiperWrapper"></div>
     </div>
   </div>
 
-  <div id="celebration">owve 1st EP [O0ㅇ] out now!</div>
-
-  <button id="soundToggle" style="position:fixed; bottom:30px; right:40px; z-index:1001; background:transparent; border:none; width:20px; height:20px; background-image:url('SoundOff.png'); background-size:contain; background-repeat:no-repeat;"></button>
-
+  <button id="bgmToggle" class="off" aria-label="toggle sound"></button>
   <audio id="bgm" src="intro.mp3" loop></audio>
 
   <script>
+    const defaultMedia = [
+      { type: 'video', src: 'media/GROUNDWORK.mp4' },
+      { type: 'image', src: 'media/question mark.gif' },
+      { type: 'image', src: 'media/kiiikiii.jpg' },
+      { type: 'image', src: 'media/leesol01.png' },
+      { type: 'image', src: 'media/leesol02.jpg' },
+      { type: 'image', src: 'media/sui01.jpg' },
+      { type: 'image', src: 'mc.gif' },
+      { type: 'image', src: 'media/0725.png' },
+      { type: 'image', src: 'media/fire.gif' },
+      { type: 'image', src: 'media/0728.png' },
+      { type: 'image', src: 'media/0729.png' },
+      { type: 'image', src: 'media/0730.png' },
+      { type: 'image', src: 'media/0731.png' },
+      { type: 'image', src: 'media/0801.png' },
+      { type: 'youtube', src: 'https://www.youtube.com/embed/pTycfmVzdl8' }
+    ];
+
+    const newRingMedia = [
+      { type: 'image', src: 'media/dh1.jpeg' },
+      { type: 'image', src: 'media/dh2.jpeg' },
+    ];
+
     let swiper;
 
-    function launchFireworks() {
-      const duration = 5600;
-      const end = Date.now() + duration;
-      (function frame() {
-        confetti({ particleCount: 10, angle: 60, spread: 70, startVelocity: 60, origin: { x: 0, y: 0.7 } });
-        confetti({ particleCount: 10, angle: 120, spread: 70, startVelocity: 60, origin: { x: 1, y: 0.7 } });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
-    }
-
-    function showCelebration() {
-      const overlay = document.getElementById('celebration');
-      overlay.style.opacity = 1;
-      launchFireworks();
-      setTimeout(() => { overlay.style.opacity = 0; }, 8000);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const mediaList = [
-        { type: 'video', src: 'media/GROUNDWORK.mp4' },
-        { type: 'image', src: 'media/question mark.gif' },
-        { type: 'image', src: 'media/kiiikiii.jpg' },
-        { type: 'image', src: 'media/leesol01.png' },
-        { type: 'image', src: 'media/leesol02.jpg' },
-        { type: 'image', src: 'media/sui01.jpg' },
-        { type: 'image', src: 'mc.gif' },
-        { type: 'image', src: 'media/0725.png' },
-        { type: 'image', src: 'media/fire.gif' },
-        { type: 'image', src: 'media/0728.png' },
-        { type: 'image', src: 'media/0729.png' },
-        { type: 'image', src: 'media/0730.png' },
-        { type: 'image', src: 'media/0731.png' },
-        { type: 'image', src: 'media/0801.png' },
-        { type: 'youtube', src: 'https://www.youtube.com/embed/pTycfmVzdl8' }
-      ];
-
+    function launchGallery(mediaList) {
       const wrapper = document.getElementById('swiperWrapper');
+      wrapper.innerHTML = '';
       mediaList.forEach(item => {
         const slide = document.createElement('div');
         slide.className = 'swiper-slide';
         if (item.type === 'image') {
           slide.innerHTML = `<img src="${item.src}" alt="">`;
         } else if (item.type === 'video') {
-          slide.innerHTML = `<video src="${item.src}" playsinline loop></video>`;
+          slide.innerHTML = `<video src="${item.src}" autoplay playsinline loop></video>`;
         } else if (item.type === 'youtube') {
-          slide.innerHTML = `
-            <iframe 
-              src="${item.src}?autoplay=1&mute=1&rel=0&enablejsapi=1"
-              frameborder="0"
-              allow="autoplay; encrypted-media"
-              allowfullscreen
-              class="youtube-iframe"
-            ></iframe>`;
+          slide.innerHTML = `<iframe src="${item.src}?autoplay=1&mute=1&rel=0&enablejsapi=1" 
+  frameborder="0" 
+  allow="autoplay; encrypted-media" 
+  allowfullscreen
+  style="width: 100%; height: 100%; max-width: 100%; max-height: 100%;"
+></iframe>`;
         }
         wrapper.appendChild(slide);
       });
 
+      if (swiper) swiper.destroy(true, true);
       swiper = new Swiper('.swiper', {
-        initialSlide: 0,
         loop: true,
         navigation: {
           nextEl: '.g-next',
@@ -275,7 +305,6 @@
         on: {
           slideChangeTransitionEnd() {
             const activeSlide = swiper.slides[swiper.activeIndex];
-
             document.querySelectorAll('.swiper-slide video').forEach(video => {
               if (activeSlide.contains(video)) {
                 video.muted = false;
@@ -295,80 +324,81 @@
                 iframe.src = src;
               }
             });
-
-            if (swiper.realIndex === 0) {
-              showCelebration();
-            }
           }
         }
       });
 
-      const modal = document.getElementById('galleryModal');
-      document.getElementById('ringTrigger').onclick = () => {
-        modal.classList.add('active');
-        swiper.update();
-        swiper.slideToLoop(0, 0);
-        setTimeout(() => {
-          const current = swiper.slides[swiper.activeIndex];
-          const video = current.querySelector('video');
-          if (video) {
-            video.muted = false;
-            video.play().catch(() => {
-              video.muted = true;
-              video.play();
-            });
-          }
-          showCelebration();
-        }, 50);
-      };
+      document.getElementById('galleryModal').classList.add('active');
+    }
 
-      modal.querySelector('.g-close').onclick = () => {
-        modal.classList.remove('active');
-        modal.querySelectorAll('video').forEach(v => v.pause());
-      };
+    document.getElementById('ringTrigger').onclick = () => {
+      launchGallery(defaultMedia);
+    };
 
-      document.querySelector('.g-download').addEventListener('click', () => {
-        const currentSlide = swiper.slides[swiper.activeIndex];
-        if (!currentSlide) return;
+    document.getElementById('scheduledRing').onclick = () => {
+      launchGallery(newRingMedia);
+    };
 
-        const img = currentSlide.querySelector('img');
-        const video = currentSlide.querySelector('video');
-        let url, filename;
+    document.querySelector('.g-close').onclick = () => {
+      document.getElementById('galleryModal').classList.remove('active');
+      document.querySelectorAll('video').forEach(v => v.pause());
+    };
 
-        if (img) {
-          url = img.src;
-          filename = `download_${img.alt || 'image'}.jpg`;
-        } else if (video) {
-          url = video.src;
-          filename = `download_${video.alt || 'video'}.mp4`;
-        } else {
-          alert('다운로드할 미디어가 없습니다.');
-          return;
-        }
+    document.querySelector('.g-download').addEventListener('click', () => {
+      const currentSlide = swiper.slides[swiper.activeIndex];
+      const img = currentSlide.querySelector('img');
+      const video = currentSlide.querySelector('video');
+      let url, filename;
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      });
+      if (img) {
+        url = img.src;
+        filename = `download_${img.alt || 'image'}.jpg`;
+      } else if (video) {
+        url = video.src;
+        filename = `download_${video.alt || 'video'}.mp4`;
+      } else {
+        alert('다운로드할 미디어가 없습니다.');
+        return;
+      }
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     });
 
+    // 배경음악 토글
     const bgm = document.getElementById('bgm');
-const soundBtn = document.getElementById('soundToggle');
-let soundOn = false;
+    const bgmBtn = document.getElementById('bgmToggle');
+    bgmBtn.onclick = () => {
+      if (bgm.paused) {
+        bgm.play().catch(() => {});
+        bgmBtn.classList.add('on');
+      } else {
+        bgm.pause();
+        bgmBtn.classList.remove('on');
+      }
+    };
 
-soundBtn.onclick = () => {
-  soundOn = !soundOn;
-  if (soundOn) {
-    bgm.play().catch(() => {});  // 자동재생 차단 대응
-    soundBtn.style.backgroundImage = "url('SoundOn.png')";
-  } else {
-    bgm.pause();
-    soundBtn.style.backgroundImage = "url('SoundOff.png')";
-  }
-};
+    // 링 예약 시스템
+    function scheduleRingShow(targetTime) {
+      const now = new Date();
+      const diff = targetTime - now;
+      if (diff > 0) {
+        setTimeout(() => {
+          document.getElementById('scheduledRing').style.display = 'flex';
+        }, diff);
+      } else {
+        // 이미 시간이 지났으면 바로 보여줌
+        document.getElementById('scheduledRing').style.display = 'flex';
+      }
+    }
+
+    // 예: 2025년 7월 24일 00:00:00에 표시
+    const scheduledTime = new Date('2025-07-24T03:46:00');
+    scheduleRingShow(scheduledTime);
   </script>
 </body>
 </html>
